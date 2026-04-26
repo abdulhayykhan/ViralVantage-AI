@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 220 15% 8%;
+  --foreground: 220 18% 92%;
+  --card: 220 16% 11%;
+  --card-foreground: 220 18% 92%;
+  --border: 220 15% 20%;
+  --muted: 220 12% 15%;
+  --muted-foreground: 220 10% 68%;
+  --primary: 160 84% 45%;
+  --primary-foreground: 220 18% 10%;
+}
+
+* {
+  @apply border-border;
+}
+
+html,
+body {
+  @apply bg-background text-foreground;
+  min-height: 100%;
+}
+
+body {
+  font-family: "Segoe UI", "Inter", sans-serif;
+}
