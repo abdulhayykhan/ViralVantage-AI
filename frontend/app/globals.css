@@ -27,3 +27,28 @@ body {
 body {
   font-family: "Segoe UI", "Inter", sans-serif;
 }
+
+@keyframes mesh-breathe {
+  0%,
+  100% {
+    background-color: #050a0f;
+  }
+  50% {
+    background-color: #0a1a15;
+  }
+}
+
+@layer utilities {
+  .glass-card {
+    @apply backdrop-blur-xl bg-white/5 border border-white/10;
+  }
+
+  .neon-glow {
+    border: 1px solid hsl(160 84% 45% / 0.5);
+    box-shadow: 0 0 0 1px hsl(160 84% 45% / 0.3), 0 0 24px hsl(160 84% 45% / 0.25);
+  }
+
+  .mesh-breathe {
+    animation: mesh-breathe 12s ease-in-out infinite;
+  }
+}
