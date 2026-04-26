@@ -5,7 +5,9 @@ export type AnalyzeResult = {
     analysis: string;
   };
   pacing_analysis: string;
+  caption_optimization: string;
   actionable_feedback: string[];
+  trending_recommendations: string[];
 };
 
 type AnalyzePayload = {

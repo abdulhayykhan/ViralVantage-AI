@@ -44,7 +44,9 @@ class AnalyzeResponse(BaseModel):
     overall_score: conint(ge=0, le=100)
     hook_strength: HookStrength
     pacing_analysis: str = Field(min_length=30, max_length=2000)
+    caption_optimization: str = Field(min_length=20, max_length=1200)
     actionable_feedback: list[str] = Field(min_length=3, max_length=3)
+    trending_recommendations: list[str] = Field(min_length=4, max_length=8)
 
     @field_validator("actionable_feedback")
     @classmethod
@@ -52,6 +54,20 @@ class AnalyzeResponse(BaseModel):
         cleaned = [item.strip() for item in value]
         if any(not item for item in cleaned):
             raise ValueError("actionable_feedback items must be non-empty")
+        return cleaned
+
+    @field_validator("trending_recommendations")
+    @classmethod
+    def validate_trending_recommendations(cls, value: list[str]) -> list[str]:
+        cleaned = [item.strip() for item in value]
+        if any(not item for item in cleaned):
+            raise ValueError("trending_recommendations items must be non-empty")
+
+        has_audio = any(item.lower().startswith("audio:") for item in cleaned)
+        has_hashtag = any(item.lower().startswith("hashtag:") for item in cleaned)
+        if not has_audio or not has_hashtag:
+            raise ValueError("trending_recommendations must include at least one 'Audio:' and one 'Hashtag:' entry")
+
         return cleaned
 
 
@@ -156,10 +172,17 @@ OUTPUT CONTRACT (STRICT):
     "analysis": "<Specific visual/audio breakdown of the first 3 seconds>"
   },
   "pacing_analysis": "<Detailed feedback on editing speed and competitor benchmark comparison>",
+    "caption_optimization": "<Optimized publish-ready caption with hook, curiosity gap, and CTA>",
   "actionable_feedback": [
     "<Hyper-specific edit directive 1>",
     "<Hyper-specific edit directive 2>",
     "<Hyper-specific edit directive 3>"
+    ],
+    "trending_recommendations": [
+        "Audio: <specific trending audio recommendation aligned to this video>",
+        "Audio: <specific backup trending audio recommendation>",
+        "Hashtag: <specific niche hashtag recommendation>",
+        "Hashtag: <specific reach hashtag recommendation>"
   ]
 }
 """.strip()
@@ -186,8 +209,22 @@ OUTPUT CONTRACT (STRICT):
                 "responseMimeType": "application/json",
                 "responseSchema": {
                     "type": "OBJECT",
-                    "required": ["overall_score", "hook_strength", "pacing_analysis", "actionable_feedback"],
-                    "propertyOrdering": ["overall_score", "hook_strength", "pacing_analysis", "actionable_feedback"],
+                    "required": [
+                        "overall_score",
+                        "hook_strength",
+                        "pacing_analysis",
+                        "caption_optimization",
+                        "actionable_feedback",
+                        "trending_recommendations",
+                    ],
+                    "propertyOrdering": [
+                        "overall_score",
+                        "hook_strength",
+                        "pacing_analysis",
+                        "caption_optimization",
+                        "actionable_feedback",
+                        "trending_recommendations",
+                    ],
                     "properties": {
                         "overall_score": {
                             "type": "INTEGER",
@@ -212,10 +249,21 @@ OUTPUT CONTRACT (STRICT):
                         "pacing_analysis": {
                             "type": "STRING",
                         },
+                        "caption_optimization": {
+                            "type": "STRING",
+                        },
                         "actionable_feedback": {
                             "type": "ARRAY",
                             "minItems": 3,
                             "maxItems": 3,
+                            "items": {
+                                "type": "STRING",
+                            },
+                        },
+                        "trending_recommendations": {
+                            "type": "ARRAY",
+                            "minItems": 4,
+                            "maxItems": 8,
                             "items": {
                                 "type": "STRING",
                             },

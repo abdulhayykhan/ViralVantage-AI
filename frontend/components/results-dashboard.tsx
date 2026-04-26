@@ -55,6 +55,20 @@ export function ResultsDashboard({ analysis, transparencyData }: Readonly<Result
                 ))}
               </ul>
             </section>
+
+            <section className="rounded-xl border border-border/80 bg-background/60 p-4">
+              <h3 className="text-sm font-semibold uppercase tracking-[0.16em] text-muted-foreground">Caption Optimization</h3>
+              <p className="mt-2 text-sm text-foreground/90">{analysis.caption_optimization}</p>
+            </section>
+
+            <section className="rounded-xl border border-border/80 bg-background/60 p-4">
+              <h3 className="text-sm font-semibold uppercase tracking-[0.16em] text-muted-foreground">Trending Audio and Hashtags</h3>
+              <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-foreground/90">
+                {analysis.trending_recommendations.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </section>
           </div>
         ) : (
           <p className="text-sm text-muted-foreground">Run an analysis to render the full results dashboard.</p>
