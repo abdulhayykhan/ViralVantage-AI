@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, DragEvent, useMemo, useState } from "react";
+import { ChangeEvent, useMemo, useState } from "react";
 import { Loader2, UploadCloud, Video } from "lucide-react";
 
 import { analyzeContent, AnalyzeResult } from "@/lib/api";
@@ -76,19 +76,19 @@ export function UploadAnalyzePanel() {
     applyFile(selectedFile);
   }
 
-  function onDragOver(event: DragEvent<HTMLDivElement>) {
+  function onDragOver(event: React.DragEvent<HTMLLabelElement>) {
     event.preventDefault();
     if (!isBusy) {
       setIsDragging(true);
     }
   }
 
-  function onDragLeave(event: DragEvent<HTMLDivElement>) {
+  function onDragLeave(event: React.DragEvent<HTMLLabelElement>) {
     event.preventDefault();
     setIsDragging(false);
   }
 
-  function onDrop(event: DragEvent<HTMLDivElement>) {
+  function onDrop(event: React.DragEvent<HTMLLabelElement>) {
     event.preventDefault();
     setIsDragging(false);
     if (isBusy) {
