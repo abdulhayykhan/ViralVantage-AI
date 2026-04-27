@@ -4,8 +4,6 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronUp, X } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
-
 export function SystemNotesWidget() {
   const [visible, setVisible] = useState(false);
   const [expanded, setExpanded] = useState(false);
@@ -45,21 +43,20 @@ export function SystemNotesWidget() {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 14, scale: 0.98 }}
                 transition={{ duration: 0.28, ease: "easeOut" }}
-                className="absolute bottom-full left-0 mb-3 w-[360px] rounded-2xl border border-border bg-background/95 p-6 shadow-2xl backdrop-blur-2xl"
+                className="absolute bottom-full left-0 mb-3 w-[360px] rounded-2xl border border-border bg-white/95 dark:bg-slate-950/95 p-6 shadow-2xl backdrop-blur-3xl z-[100]"
               >
                 <div className="mb-4 flex items-center justify-between">
                   <div>
                     <p className="text-xs uppercase tracking-[0.22em] text-muted-foreground">System Notes</p>
                     <h2 className="mt-1 text-base font-semibold text-foreground">Runtime Context</h2>
                   </div>
-                  <Button
-                    type="button"
+                  <button
                     onClick={() => setExpanded(false)}
-                    className="flex h-8 w-8 items-center justify-center rounded-md text-foreground hover:bg-muted"
                     aria-label="Close notes"
+                    className="flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground transition-colors bg-transparent"
                   >
                     <X className="h-4 w-4" />
-                  </Button>
+                  </button>
                 </div>
 
                 <div className="space-y-2 text-sm leading-relaxed text-muted-foreground">
