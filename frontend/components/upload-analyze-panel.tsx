@@ -1,6 +1,7 @@
 "use client";
 
 import { ChangeEvent, useMemo, useState } from "react";
+import { motion } from "framer-motion";
 import { Loader2, UploadCloud, Video } from "lucide-react";
 
 import { analyzeContent, AnalyzeResult } from "@/lib/api";
@@ -205,63 +206,69 @@ export function UploadAnalyzePanel() {
 
   return (
     <>
-      <Card className="glass-card hud-frame border-white/10 bg-card/70 shadow-[0_0_0_1px_rgba(255,255,255,0.02)]">
-        <CardHeader>
-          <CardTitle>Upload and Analyze</CardTitle>
-          <CardDescription>
-            Drag a short-form video to upload directly to Supabase and run virality analysis.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <label
-            onDragOver={onDragOver}
-            onDragLeave={onDragLeave}
-            onDrop={onDrop}
-            htmlFor="video-upload-input"
-            className={cn(
-              "relative rounded-lg border border-dashed p-6 text-center transition",
-              isDragging ? "border-primary bg-primary/10" : "border-border bg-muted/20",
-              isBusy && "cursor-not-allowed opacity-70",
-            )}
-          >
-            <input
-              id="video-upload-input"
-              type="file"
-              accept="video/*"
-              onChange={onFileInput}
-              disabled={isBusy}
-              className="sr-only"
-              aria-label="Upload video"
-            />
-            <UploadCloud className={cn("mx-auto mb-3 h-8 w-8 text-muted-foreground", readyToAnalyze && "animate-pulse text-primary")} />
-            <p className="text-sm font-medium">Drop video here or click to browse</p>
-            <p className="mt-1 text-xs text-muted-foreground">Maximum file size: 50MB</p>
-          </label>
+      <motion.div
+        whileHover={{ scale: 1.01, rotateX: 1, rotateY: -1, zIndex: 10 }}
+        transition={{ duration: 0.25, ease: "easeOut" }}
+        className="will-change-transform"
+      >
+        <Card className="deep-glass border-white/10 bg-card/70 shadow-[0_24px_40px_-12px_rgba(0,0,0,0.5)]">
+          <CardHeader>
+            <CardTitle>Upload and Analyze</CardTitle>
+            <CardDescription>
+              Drag a short-form video to upload directly to Supabase and run virality analysis.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <label
+              onDragOver={onDragOver}
+              onDragLeave={onDragLeave}
+              onDrop={onDrop}
+              htmlFor="video-upload-input"
+              className={cn(
+                "relative rounded-lg border border-dashed p-6 text-center transition",
+                isDragging ? "border-primary bg-primary/10" : "border-border bg-muted/20",
+                isBusy && "cursor-not-allowed opacity-70",
+              )}
+            >
+              <input
+                id="video-upload-input"
+                type="file"
+                accept="video/*"
+                onChange={onFileInput}
+                disabled={isBusy}
+                className="sr-only"
+                aria-label="Upload video"
+              />
+              <UploadCloud className={cn("mx-auto mb-3 h-8 w-8 text-muted-foreground", readyToAnalyze && "animate-pulse text-primary")} />
+              <p className="text-sm font-medium">Drop video here or click to browse</p>
+              <p className="mt-1 text-xs text-muted-foreground">Maximum file size: 50MB</p>
+            </label>
 
-          {file ? (
-            <div className="rounded-md border border-border/80 bg-background/50 p-3 text-sm">
-              <div className="flex items-center gap-2 font-medium">
-                <Video className="h-4 w-4 text-primary" />
-                <span className="truncate">{file.name}</span>
+            {file ? (
+              <div className="rounded-md border border-border/80 bg-background/50 p-3 text-sm">
+                <div className="flex items-center gap-2 font-medium">
+                  <Video className="h-4 w-4 text-primary" />
+                  <span className="truncate">{file.name}</span>
+                </div>
+                <p className="mt-1 text-xs text-muted-foreground">{(file.size / (1024 * 1024)).toFixed(2)} MB</p>
               </div>
-              <p className="mt-1 text-xs text-muted-foreground">{(file.size / (1024 * 1024)).toFixed(2)} MB</p>
-            </div>
-          ) : null}
+            ) : null}
 
-          {stageLabel ? (
-            <div className="flex items-center gap-2 rounded-md border border-primary/20 bg-primary/10 px-3 py-2 text-sm text-primary">
-              <Loader2 className="h-4 w-4 animate-spin" />
-              <span>{stageLabel}</span>
-            </div>
-          ) : null}
+            {stageLabel ? (
+              <div className="flex items-center gap-2 rounded-md border border-primary/20 bg-primary/10 px-3 py-2 text-sm text-primary">
+                <Loader2 className="h-4 w-4 animate-spin" />
+                <span>{stageLabel}</span>
+              </div>
+            ) : null}
 
-          {error ? <p className="text-sm text-red-300">{error}</p> : null}
+            {error ? <p className="text-sm text-red-300">{error}</p> : null}
 
-          <Button onClick={handleAnalyze} disabled={!file || isBusy} className="w-full">
-            {isBusy ? "Processing..." : "Analyze Video"}
-          </Button>
-        </CardContent>
-      </Card>
+            <Button onClick={handleAnalyze} disabled={!file || isBusy} className="w-full">
+              {isBusy ? "Processing..." : "Analyze Video"}
+            </Button>
+          </CardContent>
+        </Card>
+      </motion.div>
 
       <ResultsDashboard analysis={analysis} transparencyData={transparencyData} />
     </>
