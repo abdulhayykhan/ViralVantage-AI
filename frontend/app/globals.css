@@ -3,27 +3,27 @@
 @tailwind utilities;
 
 :root {
-  --background: 222 47% 4%;
-  --foreground: 210 40% 98%;
-  --card: 222 47% 7%;
-  --card-foreground: 210 40% 98%;
-  --border: 210 32% 18%;
-  --muted: 220 18% 12%;
-  --muted-foreground: 215 16% 72%;
-  --primary: 188 100% 72%;
-  --primary-foreground: 222 47% 8%;
+  --background: 222 28% 10%;
+  --foreground: 210 40% 96%;
+  --card: 222 24% 14%;
+  --card-foreground: 210 40% 96%;
+  --border: 217 18% 24%;
+  --muted: 221 20% 18%;
+  --muted-foreground: 215 16% 74%;
+  --primary: 152 76% 42%;
+  --primary-foreground: 210 40% 98%;
   color-scheme: dark;
 }
 
 .light {
   --background: 210 40% 98%;
-  --foreground: 222 47% 9%;
+  --foreground: 222 47% 11%;
   --card: 0 0% 100%;
-  --card-foreground: 222 47% 9%;
-  --border: 214 32% 80%;
-  --muted: 210 40% 94%;
-  --muted-foreground: 215 16% 28%;
-  --primary: 189 92% 32%;
+  --card-foreground: 222 47% 11%;
+  --border: 214 32% 91%;
+  --muted: 210 40% 96%;
+  --muted-foreground: 215 16% 34%;
+  --primary: 152 76% 42%;
   --primary-foreground: 0 0% 100%;
   color-scheme: light;
 }
@@ -44,33 +44,26 @@ body {
 }
 
 @layer utilities {
-  .vision-glass {
-    @apply rounded-3xl border border-white/10 bg-white/5 shadow-2xl backdrop-blur-3xl;
+  .surface-panel {
+    @apply rounded-2xl border border-border bg-card text-card-foreground shadow-sm;
   }
 
-  .hover-glow {
-    @apply relative isolate transform-gpu overflow-hidden transition-transform duration-300 ease-out;
+  .surface-chip {
+    @apply rounded-full border border-border bg-card text-card-foreground;
+  }
+
+  .surface-subtle {
+    @apply rounded-xl border border-border bg-muted text-foreground;
+  }
+
+  .solid-lift {
+    @apply transition duration-200 ease-out;
     transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
     will-change: transform;
   }
 
-  .hover-glow::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 300ms ease-out;
-    background: radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.18), transparent 58%);
-    box-shadow: 0 0 40px rgba(120, 190, 255, 0.22);
-  }
-
-  .hover-glow:hover::after {
-    opacity: 1;
-  }
-
-  .hover-glow:hover {
-    transform: translate3d(0, 0, 0);
+  .solid-lift:hover {
+    transform: translateY(-2px);
+    @apply shadow-xl;
   }
 }

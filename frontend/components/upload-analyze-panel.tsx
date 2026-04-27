@@ -227,27 +227,26 @@ export function UploadAnalyzePanel() {
   return (
     <>
       <motion.div
-        whileHover={{ rotateX: 2, rotateY: -2, scale: 1.02 }}
-        transition={{ duration: 0.25, ease: "easeOut" }}
-        style={{ transformStyle: "preserve-3d", perspective: 1200 }}
-        className="hover-glow sticky top-8 will-change-transform"
+        whileHover={{ y: -2 }}
+        transition={{ duration: 0.18, ease: "easeOut" }}
+        className="solid-lift sticky top-8 shadow-md"
       >
-        <Card className="vision-glass overflow-hidden">
-          <CardHeader className="flex flex-col gap-2 p-6">
-            <CardTitle>Upload and Analyze</CardTitle>
-            <CardDescription>
+        <Card className="surface-panel overflow-hidden rounded-3xl">
+          <CardHeader className="flex flex-col gap-3 p-8 pb-5">
+            <CardTitle className="text-2xl font-semibold tracking-[-0.015em]">Upload and Analyze</CardTitle>
+            <CardDescription className="max-w-prose text-[15px] leading-6 text-muted-foreground">
               Drag a short-form video to upload directly to Supabase and run virality analysis.
             </CardDescription>
           </CardHeader>
-          <CardContent className="flex flex-col gap-4 p-6 pt-0">
+          <CardContent className="flex flex-col gap-5 p-8 pt-0">
             <label
               onDragOver={onDragOver}
               onDragLeave={onDragLeave}
               onDrop={onDrop}
               htmlFor="video-upload-input"
               className={cn(
-                "flex min-h-40 flex-col items-center justify-center rounded-2xl border border-white/10 bg-white/5 p-6 text-center transition",
-                isDragging ? "border-white/30 bg-white/10" : "",
+                "surface-subtle solid-lift flex min-h-44 flex-col items-center justify-center rounded-2xl p-7 text-center shadow-sm",
+                isDragging ? "border-primary bg-primary/5" : "",
                 isBusy && "cursor-not-allowed opacity-70",
               )}
             >
@@ -261,12 +260,12 @@ export function UploadAnalyzePanel() {
                 aria-label="Upload video"
               />
               <UploadCloud className={cn("mb-3 h-8 w-8 text-muted-foreground", readyToAnalyze && "animate-pulse text-primary")} />
-              <p className="text-sm font-medium">Drop video here or click to browse</p>
-              <p className="mt-1 text-xs text-muted-foreground">Maximum file size: 50MB</p>
+              <p className="text-base font-semibold tracking-[-0.01em]">Drop video here or click to browse</p>
+              <p className="mt-1 text-xs font-medium uppercase tracking-[0.15em] text-muted-foreground">Maximum file size: 50MB</p>
             </label>
 
             {file ? (
-              <div className="flex flex-col gap-1 rounded-2xl border border-white/10 bg-white/5 p-4 text-sm">
+              <div className="surface-subtle flex flex-col gap-1 rounded-2xl p-4 text-sm">
                 <div className="flex items-center gap-2 font-medium">
                   <Video className="h-4 w-4 text-primary" />
                   <span className="truncate">{file.name}</span>
@@ -276,20 +275,20 @@ export function UploadAnalyzePanel() {
             ) : null}
 
             {stageLabel ? (
-              <div className="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-primary">
+              <div className="surface-subtle flex items-center gap-2 rounded-2xl px-4 py-3 text-sm text-primary">
                 <Loader2 className="h-4 w-4 animate-spin" />
                 <span>{stageLabel}</span>
               </div>
             ) : null}
 
             {showOfflineModeNotice ? (
-              <div className="rounded-2xl border border-amber-300/40 bg-amber-200/10 px-4 py-3 text-sm text-amber-200">
+              <div className="rounded-2xl border border-amber-500 bg-amber-100 px-4 py-3 text-sm font-medium text-amber-900 dark:bg-amber-900 dark:text-amber-100">
                 Offline Mode: Using cached analysis
               </div>
             ) : null}
 
             {isMockData && !showOfflineModeNotice ? (
-              <p className="text-xs text-amber-200/80">Cached analysis used for demo reliability.</p>
+              <p className="text-xs text-amber-300">Cached analysis used for demo reliability.</p>
             ) : null}
 
             {error ? <p className="text-sm text-red-300">{error}</p> : null}

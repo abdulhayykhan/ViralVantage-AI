@@ -29,7 +29,8 @@ export function InteractiveGuide() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 12 }}
             transition={{ duration: 0.35, ease: "easeOut" }}
-            className="vision-glass hover-glow flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-foreground/90"
+            whileHover={{ y: -2 }}
+            className="surface-chip solid-lift flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-foreground shadow-sm"
             aria-expanded={expanded}
             aria-label="Toggle usage guide"
           >
@@ -44,7 +45,7 @@ export function InteractiveGuide() {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 14, scale: 0.98 }}
                 transition={{ duration: 0.28, ease: "easeOut" }}
-                className="vision-glass hover-glow absolute bottom-full right-0 mb-3 w-[min(24rem,calc(100vw-1.5rem))] rounded-3xl p-5 text-sm text-foreground/90"
+                className="surface-panel absolute bottom-full right-0 mb-3 w-[min(24rem,calc(100vw-1.5rem))] rounded-2xl p-5 text-sm text-foreground shadow-xl"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div>

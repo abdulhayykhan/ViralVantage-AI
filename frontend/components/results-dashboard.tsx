@@ -36,16 +36,15 @@ export function ResultsDashboard({ analysis, transparencyData }: Readonly<Result
 
   return (
     <motion.div
-      whileHover={{ rotateX: 1.5, rotateY: -1.5, scale: 1.01 }}
-      transition={{ duration: 0.25, ease: "easeOut" }}
-      style={{ transformStyle: "preserve-3d", perspective: 1200 }}
-      className="hover-glow will-change-transform"
+      whileHover={{ y: -2 }}
+      transition={{ duration: 0.18, ease: "easeOut" }}
+      className="solid-lift shadow-md"
     >
-      <Card className="vision-glass overflow-hidden">
-        <CardHeader className="flex flex-col gap-2 p-6">
+      <Card className="surface-panel overflow-hidden rounded-3xl">
+        <CardHeader className="flex flex-col gap-3 p-8 pb-5">
           <div>
-            <CardTitle>Results Dashboard</CardTitle>
-            <CardDescription>Scoring, hook diagnostics, and optimization actions.</CardDescription>
+            <CardTitle className="text-2xl font-semibold tracking-[-0.015em]">Results Dashboard</CardTitle>
+            <CardDescription className="mt-1 text-[15px] leading-6 text-muted-foreground">Scoring, hook diagnostics, and optimization actions.</CardDescription>
           </div>
           <TransparencyPanel
             rawLogic={transparencyData?.rawLogic ?? null}
@@ -54,32 +53,32 @@ export function ResultsDashboard({ analysis, transparencyData }: Readonly<Result
           />
         </CardHeader>
 
-        <CardContent className="flex flex-col gap-4 p-6 pt-0">
+        <CardContent className="flex flex-col gap-4 p-8 pt-0">
           {analysis ? (
             <motion.div className="grid grid-cols-1 gap-4 xl:grid-cols-2" variants={staggerContainer} initial="hidden" animate="visible">
-              <motion.section layout variants={cardReveal} className="vision-glass rounded-3xl p-6 xl:col-span-2">
+              <motion.section layout variants={cardReveal} className="surface-subtle rounded-2xl p-6 xl:col-span-2">
                 <OverallScore score={analysis.overall_score} />
               </motion.section>
 
-              <motion.section layout variants={cardReveal} className="vision-glass rounded-3xl p-6">
-                <h3 className="text-sm font-semibold uppercase tracking-[0.16em] text-muted-foreground">Hook Analysis</h3>
+              <motion.section layout variants={cardReveal} className="surface-subtle rounded-2xl p-6">
+                <h3 className="text-xs font-semibold uppercase tracking-[0.24em] text-muted-foreground">Hook Analysis</h3>
                 <p className="mt-2 text-xs uppercase tracking-[0.14em] text-primary">Score: {analysis.hook_strength.score}/10</p>
-                <p className="mt-2 text-sm text-foreground/90">{analysis.hook_strength.analysis}</p>
+                <p className="mt-3 text-sm leading-6 text-foreground">{analysis.hook_strength.analysis}</p>
               </motion.section>
 
-              <motion.section layout variants={cardReveal} className="vision-glass rounded-3xl p-6">
-                <h3 className="text-sm font-semibold uppercase tracking-[0.16em] text-muted-foreground">Pacing Analysis</h3>
-                <p className="mt-2 text-sm text-foreground/90">{analysis.pacing_analysis}</p>
+              <motion.section layout variants={cardReveal} className="surface-subtle rounded-2xl p-6">
+                <h3 className="text-xs font-semibold uppercase tracking-[0.24em] text-muted-foreground">Pacing Analysis</h3>
+                <p className="mt-3 text-sm leading-6 text-foreground">{analysis.pacing_analysis}</p>
               </motion.section>
 
-              <motion.section layout variants={cardReveal} className="vision-glass rounded-3xl p-6">
-                <h3 className="text-sm font-semibold uppercase tracking-[0.16em] text-muted-foreground">Caption Optimization</h3>
-                <p className="mt-2 text-sm text-foreground/90">{analysis.caption_optimization}</p>
+              <motion.section layout variants={cardReveal} className="surface-subtle rounded-2xl p-6">
+                <h3 className="text-xs font-semibold uppercase tracking-[0.24em] text-muted-foreground">Caption Optimization</h3>
+                <p className="mt-3 text-sm leading-6 text-foreground">{analysis.caption_optimization}</p>
               </motion.section>
 
-              <motion.section layout variants={cardReveal} className="vision-glass rounded-3xl p-6">
-                <h3 className="text-sm font-semibold uppercase tracking-[0.16em] text-muted-foreground">Trending Audio and Hashtags</h3>
-                <ul className="mt-2 space-y-1 text-sm text-foreground/90">
+              <motion.section layout variants={cardReveal} className="surface-subtle rounded-2xl p-6">
+                <h3 className="text-xs font-semibold uppercase tracking-[0.24em] text-muted-foreground">Trending Audio and Hashtags</h3>
+                <ul className="mt-3 space-y-2 text-sm text-foreground">
                   {analysis.trending_recommendations.map((item) => (
                     <li key={item} className="flex gap-2">
                       <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" strokeWidth={3} />
@@ -89,9 +88,9 @@ export function ResultsDashboard({ analysis, transparencyData }: Readonly<Result
                 </ul>
               </motion.section>
 
-              <motion.section layout variants={cardReveal} className="vision-glass rounded-3xl p-6 xl:col-span-2">
-                <h3 className="text-sm font-semibold uppercase tracking-[0.16em] text-muted-foreground">Actionable Feedback</h3>
-                <ul className="mt-2 space-y-1 text-sm text-foreground/90">
+              <motion.section layout variants={cardReveal} className="surface-subtle rounded-2xl p-6 xl:col-span-2">
+                <h3 className="text-xs font-semibold uppercase tracking-[0.24em] text-muted-foreground">Actionable Feedback</h3>
+                <ul className="mt-3 space-y-2 text-sm text-foreground">
                   {analysis.actionable_feedback.map((item) => (
                     <li key={item} className="flex gap-2">
                       <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" strokeWidth={3} />
