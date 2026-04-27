@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { Check } from "lucide-react";
 import { AnalyzeResult } from "@/lib/api";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { OverallScore } from "@/components/overall-score";
@@ -47,12 +48,12 @@ export function ResultsDashboard({ analysis, transparencyData }: Readonly<Result
         />
       </CardHeader>
 
-      <CardContent>
+      <CardContent className="max-h-[600px] overflow-y-auto">
         {analysis ? (
           <motion.div className="space-y-5" variants={staggerContainer} initial="hidden" animate="visible">
             <OverallScore score={analysis.overall_score} />
 
-            <div className="grid gap-4 md:grid-cols-2">
+            <div className="grid grid-cols-1 gap-4">
               <motion.section variants={cardReveal} className="glass-card hud-frame rounded-xl bg-background/40 p-4">
                 <h3 className="text-sm font-semibold uppercase tracking-[0.16em] text-muted-foreground">Hook Analysis</h3>
                 <p className="mt-2 text-xs uppercase tracking-[0.14em] text-primary">Score: {analysis.hook_strength.score}/10</p>
@@ -74,7 +75,7 @@ export function ResultsDashboard({ analysis, transparencyData }: Readonly<Result
                 <ul className="mt-2 space-y-1 text-sm text-foreground/90">
                   {analysis.trending_recommendations.map((item) => (
                     <li key={item} className="flex gap-2">
-                      <span className="text-primary">[✓]</span>
+                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" strokeWidth={3} />
                       <span>{item}</span>
                     </li>
                   ))}
@@ -86,7 +87,7 @@ export function ResultsDashboard({ analysis, transparencyData }: Readonly<Result
                 <ul className="mt-2 space-y-1 text-sm text-foreground/90">
                   {analysis.actionable_feedback.map((item) => (
                     <li key={item} className="flex gap-2">
-                      <span className="text-primary">[✓]</span>
+                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" strokeWidth={3} />
                       <span>{item}</span>
                     </li>
                   ))}

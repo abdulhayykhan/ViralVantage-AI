@@ -41,6 +41,8 @@ export function UploadAnalyzePanel() {
     return null;
   }, [stage]);
 
+  const readyToAnalyze = Boolean(file) && !isBusy;
+
   function validateFile(nextFile: File): string | null {
     if (!nextFile.type.startsWith("video/")) {
       return "Only video files are supported.";
@@ -203,7 +205,7 @@ export function UploadAnalyzePanel() {
 
   return (
     <>
-      <Card className="border-white/10 bg-card/70 shadow-[0_0_0_1px_rgba(255,255,255,0.02)]">
+      <Card className="glass-card hud-frame border-white/10 bg-card/70 shadow-[0_0_0_1px_rgba(255,255,255,0.02)]">
         <CardHeader>
           <CardTitle>Upload and Analyze</CardTitle>
           <CardDescription>
@@ -231,7 +233,7 @@ export function UploadAnalyzePanel() {
               className="sr-only"
               aria-label="Upload video"
             />
-            <UploadCloud className="mx-auto mb-3 h-8 w-8 text-muted-foreground" />
+            <UploadCloud className={cn("mx-auto mb-3 h-8 w-8 text-muted-foreground", readyToAnalyze && "animate-pulse text-primary")} />
             <p className="text-sm font-medium">Drop video here or click to browse</p>
             <p className="mt-1 text-xs text-muted-foreground">Maximum file size: 50MB</p>
           </label>
