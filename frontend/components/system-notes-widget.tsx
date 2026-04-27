@@ -28,11 +28,11 @@ export function SystemNotesWidget() {
             exit={{ opacity: 0, y: 12 }}
             transition={{ duration: 0.35, ease: "easeOut" }}
             whileHover={{ y: -2 }}
-            className="surface-chip solid-lift flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-foreground shadow-sm"
+            className="surface-chip solid-lift flex w-auto items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-foreground shadow-sm"
             aria-expanded={expanded}
             aria-label="Toggle system notes"
           >
-            <span>System Notes</span>
+            <span className="whitespace-nowrap">System Notes</span>
             <ChevronUp className={expanded ? "h-4 w-4 rotate-180 transition-transform" : "h-4 w-4 transition-transform"} />
           </motion.button>
 
