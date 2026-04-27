@@ -12,6 +12,20 @@
   --muted-foreground: 215 16% 72%;
   --primary: 188 100% 72%;
   --primary-foreground: 222 47% 8%;
+  color-scheme: dark;
+}
+
+.light {
+  --background: 210 33% 97%;
+  --foreground: 222 47% 11%;
+  --card: 0 0% 100%;
+  --card-foreground: 222 47% 11%;
+  --border: 214 32% 86%;
+  --muted: 210 40% 94%;
+  --muted-foreground: 215 16% 36%;
+  --primary: 189 92% 38%;
+  --primary-foreground: 0 0% 100%;
+  color-scheme: light;
 }
 
 * {
@@ -32,5 +46,30 @@ body {
 @layer utilities {
   .vision-glass {
     @apply rounded-3xl border border-white/10 bg-white/5 shadow-2xl backdrop-blur-3xl;
+  }
+
+  .hover-glow {
+    @apply relative isolate transform-gpu overflow-hidden transition-transform duration-300 ease-out;
+    will-change: transform;
+  }
+
+  .hover-glow::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 300ms ease-out;
+    background: radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.18), transparent 58%);
+    box-shadow: 0 0 40px rgba(120, 190, 255, 0.22);
+  }
+
+  .hover-glow:hover::after {
+    opacity: 1;
+  }
+
+  .hover-glow:hover {
+    transform: translate3d(0, 0, 0);
   }
 }

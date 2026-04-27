@@ -11,17 +11,17 @@ export function InteractiveGuide() {
   const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
-    const timeoutId = window.setTimeout(() => {
+    const timeoutId = globalThis.setTimeout(() => {
       setVisible(true);
     }, 2000);
 
-    return () => window.clearTimeout(timeoutId);
+    return () => globalThis.clearTimeout(timeoutId);
   }, []);
 
   return (
     <AnimatePresence>
       {visible ? (
-        <div className="fixed bottom-5 left-1/2 z-50 -translate-x-1/2">
+        <div className="fixed bottom-6 right-6 z-50">
           <motion.button
             type="button"
             onClick={() => setExpanded((current) => !current)}
@@ -29,7 +29,7 @@ export function InteractiveGuide() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 12 }}
             transition={{ duration: 0.35, ease: "easeOut" }}
-            className="vision-glass flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-foreground/90"
+            className="vision-glass hover-glow flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-foreground/90"
             aria-expanded={expanded}
             aria-label="Toggle usage guide"
           >
@@ -44,7 +44,7 @@ export function InteractiveGuide() {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 14, scale: 0.98 }}
                 transition={{ duration: 0.28, ease: "easeOut" }}
-                className="vision-glass mt-3 w-[min(24rem,calc(100vw-2rem))] rounded-3xl p-5 text-sm text-foreground/90"
+                className="vision-glass hover-glow absolute bottom-full right-0 mb-3 w-[min(24rem,calc(100vw-1.5rem))] rounded-3xl p-5 text-sm text-foreground/90"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div>
@@ -65,7 +65,7 @@ export function InteractiveGuide() {
 
                 <div className="mt-3 space-y-2 leading-6 text-foreground/85">
                   <p>Step 1: Drop a short-form video.</p>
-                  <p>Step 2: Wait for Gemini 2.0 Flash to process the hook and pacing.</p>
+                  <p>Step 2: Wait for Gemini 2.5 Flash to process the hook and pacing.</p>
                   <p>Step 3: Apply actionable feedback.</p>
                 </div>
               </motion.aside>

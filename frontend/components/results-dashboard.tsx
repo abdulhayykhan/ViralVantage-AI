@@ -39,7 +39,7 @@ export function ResultsDashboard({ analysis, transparencyData }: Readonly<Result
       whileHover={{ rotateX: 1.5, rotateY: -1.5, scale: 1.01 }}
       transition={{ duration: 0.25, ease: "easeOut" }}
       style={{ transformStyle: "preserve-3d", perspective: 1200 }}
-      className="will-change-transform"
+      className="hover-glow will-change-transform"
     >
       <Card className="vision-glass overflow-hidden">
         <CardHeader className="flex flex-col gap-2 p-6">
