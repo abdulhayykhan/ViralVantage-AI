@@ -207,26 +207,27 @@ export function UploadAnalyzePanel() {
   return (
     <>
       <motion.div
-        whileHover={{ scale: 1.01, rotateX: 1, rotateY: -1, zIndex: 10 }}
+        whileHover={{ rotateX: 2, rotateY: -2, scale: 1.02 }}
         transition={{ duration: 0.25, ease: "easeOut" }}
+        style={{ transformStyle: "preserve-3d", perspective: 1200 }}
         className="will-change-transform"
       >
-        <Card className="deep-glass border-white/10 bg-card/70 shadow-[0_24px_40px_-12px_rgba(0,0,0,0.5)]">
-          <CardHeader>
+        <Card className="vision-glass overflow-hidden">
+          <CardHeader className="flex flex-col gap-2 p-6">
             <CardTitle>Upload and Analyze</CardTitle>
             <CardDescription>
               Drag a short-form video to upload directly to Supabase and run virality analysis.
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="flex flex-col gap-4 p-6 pt-0">
             <label
               onDragOver={onDragOver}
               onDragLeave={onDragLeave}
               onDrop={onDrop}
               htmlFor="video-upload-input"
               className={cn(
-                "relative rounded-lg border border-dashed p-6 text-center transition",
-                isDragging ? "border-primary bg-primary/10" : "border-border bg-muted/20",
+                "flex min-h-40 flex-col items-center justify-center rounded-2xl border border-white/10 bg-white/5 p-6 text-center transition",
+                isDragging ? "border-white/30 bg-white/10" : "",
                 isBusy && "cursor-not-allowed opacity-70",
               )}
             >
@@ -239,13 +240,13 @@ export function UploadAnalyzePanel() {
                 className="sr-only"
                 aria-label="Upload video"
               />
-              <UploadCloud className={cn("mx-auto mb-3 h-8 w-8 text-muted-foreground", readyToAnalyze && "animate-pulse text-primary")} />
+              <UploadCloud className={cn("mb-3 h-8 w-8 text-muted-foreground", readyToAnalyze && "animate-pulse text-primary")} />
               <p className="text-sm font-medium">Drop video here or click to browse</p>
               <p className="mt-1 text-xs text-muted-foreground">Maximum file size: 50MB</p>
             </label>
 
             {file ? (
-              <div className="rounded-md border border-border/80 bg-background/50 p-3 text-sm">
+              <div className="flex flex-col gap-1 rounded-2xl border border-white/10 bg-white/5 p-4 text-sm">
                 <div className="flex items-center gap-2 font-medium">
                   <Video className="h-4 w-4 text-primary" />
                   <span className="truncate">{file.name}</span>
@@ -255,7 +256,7 @@ export function UploadAnalyzePanel() {
             ) : null}
 
             {stageLabel ? (
-              <div className="flex items-center gap-2 rounded-md border border-primary/20 bg-primary/10 px-3 py-2 text-sm text-primary">
+              <div className="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-primary">
                 <Loader2 className="h-4 w-4 animate-spin" />
                 <span>{stageLabel}</span>
               </div>

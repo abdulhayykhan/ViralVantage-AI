@@ -36,12 +36,13 @@ export function ResultsDashboard({ analysis, transparencyData }: Readonly<Result
 
   return (
     <motion.div
-      whileHover={{ scale: 1.01, rotateX: 1, rotateY: -1, zIndex: 10 }}
+      whileHover={{ rotateX: 1.5, rotateY: -1.5, scale: 1.01 }}
       transition={{ duration: 0.25, ease: "easeOut" }}
+      style={{ transformStyle: "preserve-3d", perspective: 1200 }}
       className="will-change-transform"
     >
-      <Card className="deep-glass overflow-hidden border-white/10 bg-card/70">
-        <CardHeader className="flex flex-row items-start justify-between gap-3">
+      <Card className="vision-glass overflow-hidden">
+        <CardHeader className="flex flex-col gap-2 p-6">
           <div>
             <CardTitle>Results Dashboard</CardTitle>
             <CardDescription>Scoring, hook diagnostics, and optimization actions.</CardDescription>
@@ -53,29 +54,29 @@ export function ResultsDashboard({ analysis, transparencyData }: Readonly<Result
           />
         </CardHeader>
 
-        <CardContent className="custom-scrollbar max-h-[600px] overflow-y-auto p-6 pr-4">
+        <CardContent className="flex flex-col gap-4 p-6 pt-0">
           {analysis ? (
-            <motion.div className="space-y-5" variants={staggerContainer} initial="hidden" animate="visible">
+            <motion.div className="flex flex-col gap-4" variants={staggerContainer} initial="hidden" animate="visible">
               <OverallScore score={analysis.overall_score} />
 
-              <div className="grid grid-cols-1 gap-4">
-                <motion.section variants={cardReveal} className="deep-glass rounded-xl bg-background/40 p-6">
+              <div className="flex flex-col gap-4">
+                <motion.section layout variants={cardReveal} className="vision-glass rounded-3xl p-6">
                   <h3 className="text-sm font-semibold uppercase tracking-[0.16em] text-muted-foreground">Hook Analysis</h3>
                   <p className="mt-2 text-xs uppercase tracking-[0.14em] text-primary">Score: {analysis.hook_strength.score}/10</p>
                   <p className="mt-2 text-sm text-foreground/90">{analysis.hook_strength.analysis}</p>
                 </motion.section>
 
-                <motion.section variants={cardReveal} className="deep-glass rounded-xl bg-background/40 p-6">
+                <motion.section layout variants={cardReveal} className="vision-glass rounded-3xl p-6">
                   <h3 className="text-sm font-semibold uppercase tracking-[0.16em] text-muted-foreground">Pacing Analysis</h3>
                   <p className="mt-2 text-sm text-foreground/90">{analysis.pacing_analysis}</p>
                 </motion.section>
 
-                <motion.section variants={cardReveal} className="deep-glass rounded-xl bg-background/40 p-6">
+                <motion.section layout variants={cardReveal} className="vision-glass rounded-3xl p-6">
                   <h3 className="text-sm font-semibold uppercase tracking-[0.16em] text-muted-foreground">Caption Optimization</h3>
                   <p className="mt-2 text-sm text-foreground/90">{analysis.caption_optimization}</p>
                 </motion.section>
 
-                <section className="deep-glass rounded-xl bg-background/40 p-6">
+                <motion.section layout variants={cardReveal} className="vision-glass rounded-3xl p-6">
                   <h3 className="text-sm font-semibold uppercase tracking-[0.16em] text-muted-foreground">Trending Audio and Hashtags</h3>
                   <ul className="mt-2 space-y-1 text-sm text-foreground/90">
                     {analysis.trending_recommendations.map((item) => (
@@ -85,9 +86,9 @@ export function ResultsDashboard({ analysis, transparencyData }: Readonly<Result
                       </li>
                     ))}
                   </ul>
-                </section>
+                </motion.section>
 
-                <section className="deep-glass rounded-xl bg-background/40 p-6">
+                <motion.section layout variants={cardReveal} className="vision-glass rounded-3xl p-6">
                   <h3 className="text-sm font-semibold uppercase tracking-[0.16em] text-muted-foreground">Actionable Feedback</h3>
                   <ul className="mt-2 space-y-1 text-sm text-foreground/90">
                     {analysis.actionable_feedback.map((item) => (
@@ -97,7 +98,7 @@ export function ResultsDashboard({ analysis, transparencyData }: Readonly<Result
                       </li>
                     ))}
                   </ul>
-                </section>
+                </motion.section>
               </div>
             </motion.div>
           ) : (
