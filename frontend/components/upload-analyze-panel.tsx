@@ -210,7 +210,7 @@ export function UploadAnalyzePanel() {
         whileHover={{ rotateX: 2, rotateY: -2, scale: 1.02 }}
         transition={{ duration: 0.25, ease: "easeOut" }}
         style={{ transformStyle: "preserve-3d", perspective: 1200 }}
-        className="hover-glow will-change-transform"
+        className="hover-glow sticky top-8 will-change-transform"
       >
         <Card className="vision-glass overflow-hidden">
           <CardHeader className="flex flex-col gap-2 p-6">

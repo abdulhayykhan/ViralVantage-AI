@@ -5,6 +5,7 @@ import { Moon, Sun } from "lucide-react";
 import { ThemeProvider, useTheme } from "next-themes";
 
 import { InteractiveGuide } from "@/components/interactive-guide";
+import { SystemNotesWidget } from "@/components/system-notes-widget";
 import { Button } from "@/components/ui/button";
 
 function ThemeToggle() {
@@ -49,7 +50,7 @@ export function DashboardLayout({ children }: Readonly<{ children: ReactNode }>)
         <div className="absolute inset-0 bg-[linear-gradient(180deg,hsl(var(--background)),hsl(var(--background)))]" aria-hidden />
 
         <header className="relative z-10 border-b border-border/60 bg-background/80 backdrop-blur-xl">
-          <div className="mx-auto flex w-full max-w-5xl items-center justify-between px-6 py-4">
+          <div className="mx-auto flex w-full max-w-[1800px] items-center justify-between px-4 lg:px-8 py-4">
             <div>
               <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">ViralVantage-AI</p>
               <h1 className="text-lg font-semibold">Creator Performance Dashboard</h1>
@@ -65,7 +66,8 @@ export function DashboardLayout({ children }: Readonly<{ children: ReactNode }>)
           </div>
         </header>
 
-        <main className="relative z-10 mx-auto grid w-full max-w-5xl gap-6 px-6 py-8 lg:grid-cols-[1.2fr_0.8fr]">{children}</main>
+        <main className="relative z-10 mx-auto grid w-full max-w-[1800px] grid-cols-1 items-start gap-8 px-4 py-8 lg:grid-cols-[400px_1fr] lg:px-8 xl:grid-cols-[450px_1fr]">{children}</main>
+        <SystemNotesWidget />
         <InteractiveGuide />
       </div>
     </ThemeProvider>

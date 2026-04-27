@@ -16,14 +16,14 @@
 }
 
 .light {
-  --background: 210 33% 97%;
-  --foreground: 222 47% 11%;
+  --background: 210 40% 98%;
+  --foreground: 222 47% 9%;
   --card: 0 0% 100%;
-  --card-foreground: 222 47% 11%;
-  --border: 214 32% 86%;
+  --card-foreground: 222 47% 9%;
+  --border: 214 32% 80%;
   --muted: 210 40% 94%;
-  --muted-foreground: 215 16% 36%;
-  --primary: 189 92% 38%;
+  --muted-foreground: 215 16% 28%;
+  --primary: 189 92% 32%;
   --primary-foreground: 0 0% 100%;
   color-scheme: light;
 }
@@ -50,6 +50,7 @@ body {
 
   .hover-glow {
     @apply relative isolate transform-gpu overflow-hidden transition-transform duration-300 ease-out;
+    transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
     will-change: transform;
   }
 
