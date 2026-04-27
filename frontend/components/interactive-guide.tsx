@@ -45,25 +45,24 @@ export function InteractiveGuide() {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 14, scale: 0.98 }}
                 transition={{ duration: 0.28, ease: "easeOut" }}
-                className="absolute bottom-full right-0 mb-3 max-w-xs rounded-2xl border border-border bg-background/95 p-5 text-sm text-foreground shadow-2xl backdrop-blur-xl"
+                className="absolute bottom-full right-0 mb-3 w-[320px] rounded-2xl border border-border bg-background/95 p-6 shadow-2xl backdrop-blur-2xl"
               >
-                <div className="flex items-start justify-between gap-3">
+                <div className="mb-4 flex items-center justify-between">
                   <div>
                     <p className="text-xs uppercase tracking-[0.22em] text-muted-foreground">Usage Guide</p>
-                    <h2 className="mt-1 text-base font-semibold">Workflow</h2>
+                    <h2 className="mt-1 text-base font-semibold text-foreground">Workflow</h2>
                   </div>
                   <Button
                     type="button"
-                    size="sm"
                     onClick={() => setExpanded(false)}
-                    className="h-8 w-8 rounded-full bg-muted/50 p-0 text-foreground hover:bg-muted"
+                    className="flex h-8 w-8 items-center justify-center rounded-md text-foreground hover:bg-muted"
                     aria-label="Close guide"
                   >
                     <X className="h-4 w-4" />
                   </Button>
                 </div>
 
-                <div className="mt-3 space-y-2 leading-6 text-foreground/85">
+                <div className="space-y-2 text-sm leading-relaxed text-muted-foreground">
                   <p>Step 1: Drop a short-form video.</p>
                   <p>Step 2: Wait for Gemini 2.5 Flash to process the hook and pacing.</p>
                   <p>Step 3: Apply actionable feedback.</p>

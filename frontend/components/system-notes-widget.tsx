@@ -45,25 +45,24 @@ export function SystemNotesWidget() {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 14, scale: 0.98 }}
                 transition={{ duration: 0.28, ease: "easeOut" }}
-                className="absolute bottom-full left-0 mb-3 max-w-sm rounded-2xl border border-border bg-background/95 p-5 text-sm text-foreground shadow-2xl backdrop-blur-xl"
+                className="absolute bottom-full left-0 mb-3 w-[360px] rounded-2xl border border-border bg-background/95 p-6 shadow-2xl backdrop-blur-2xl"
               >
-                <div className="flex items-start justify-between gap-3">
+                <div className="mb-4 flex items-center justify-between">
                   <div>
                     <p className="text-xs uppercase tracking-[0.22em] text-muted-foreground">System Notes</p>
-                    <h2 className="mt-1 text-base font-semibold">Runtime Context</h2>
+                    <h2 className="mt-1 text-base font-semibold text-foreground">Runtime Context</h2>
                   </div>
                   <Button
                     type="button"
-                    size="sm"
                     onClick={() => setExpanded(false)}
-                    className="h-8 w-8 rounded-full bg-muted/50 p-0 text-foreground hover:bg-muted"
+                    className="flex h-8 w-8 items-center justify-center rounded-md text-foreground hover:bg-muted"
                     aria-label="Close notes"
                   >
                     <X className="h-4 w-4" />
                   </Button>
                 </div>
 
-                <div className="mt-3 space-y-2 leading-6 text-foreground/85">
+                <div className="space-y-2 text-sm leading-relaxed text-muted-foreground">
                   <p>Uploads go directly to Supabase Storage from the browser.</p>
                   <p>Backend handles orchestration and audit logging only.</p>
                   <p>AI inference runs on Gemini API, not your local machine.</p>
