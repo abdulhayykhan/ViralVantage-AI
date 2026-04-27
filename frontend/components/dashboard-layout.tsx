@@ -44,20 +44,36 @@ function ThemeToggle() {
 }
 
 export function DashboardLayout({ children }: Readonly<{ children: ReactNode }>) {
+  const [isOnline, setIsOnline] = useState(true);
+
+  useEffect(() => {
+    const handleSystemStatusOffline = () => {
+      setIsOnline(false);
+    };
+
+    window.addEventListener("system-status-offline", handleSystemStatusOffline);
+
+    return () => {
+      window.removeEventListener("system-status-offline", handleSystemStatusOffline);
+    };
+  }, []);
+
   return (
     <ThemeProvider attribute="class" defaultTheme="dark">
       <div className="relative min-h-screen glass-mesh">
         <header className="relative z-10">
           <div className="glass-panel mx-auto flex w-full max-w-[1800px] items-center justify-between px-4 lg:px-8 py-6 backdrop-blur-2xl">
             <div className="z-10">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-muted-foreground">ViralVantage-AI</p>
+              <div className="flex items-center gap-3">
+                <img src="/icon.svg" alt="ViralVantage-AI logo" className="h-6 w-6 shrink-0" />
+                <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-muted-foreground">ViralVantage-AI</p>
+              </div>
               <h1 className="mt-1 brand-h1">Creator Performance Dashboard</h1>
             </div>
             <div className="flex items-center gap-3 z-10">
-              <div className="glass-chip px-3 py-1 text-xs font-medium">Phase 17</div>
               <div className="glass-chip flex items-center gap-2 px-3 py-1 text-xs font-medium">
-                <span className="inline-block h-2.5 w-2.5 rounded-full bg-accent-primary" />
-                <span className="uppercase tracking-[0.12em]">System Status: Online</span>
+                <span className={`inline-block h-2.5 w-2.5 rounded-full ${isOnline ? "bg-primary" : "bg-red-500"}`} />
+                <span className="uppercase tracking-[0.12em]">SYSTEM STATUS: {isOnline ? "ONLINE" : "OFFLINE"}</span>
               </div>
               <ThemeToggle />
             </div>

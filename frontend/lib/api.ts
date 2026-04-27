@@ -57,6 +57,7 @@ export async function analyzeContent(payload: AnalyzePayload): Promise<AnalyzeRe
 
     if (response.status === 503) {
       console.warn("API unreachable: Falling back to offline mock data");
+      if (typeof window !== "undefined") window.dispatchEvent(new CustomEvent('system-status-offline'));
       return MOCK_VIRAL_RESULT;
     }
 
@@ -77,6 +78,7 @@ export async function analyzeContent(payload: AnalyzePayload): Promise<AnalyzeRe
   } catch (error) {
     if (error instanceof Error && error.message === "Failed to fetch") {
       console.warn("API unreachable: Falling back to offline mock data");
+      if (typeof window !== "undefined") window.dispatchEvent(new CustomEvent('system-status-offline'));
       return MOCK_VIRAL_RESULT;
     }
     throw error;
