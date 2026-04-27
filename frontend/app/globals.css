@@ -10,6 +10,11 @@
   --muted-1: 215 18% 26%;
   --glass-tint: 210 40% 10%;
   --primary: 165 85% 42%; /* vibrant teal/green */
+  --card: 217 20% 8%;
+  --card-foreground: 210 40% 98%;
+  --border: 217 18% 24%;
+  --muted-foreground: 215 16% 74%;
+  --primary-foreground: 210 40% 98%;
   color-scheme: dark;
 }
 
@@ -20,6 +25,11 @@
   --muted-1: 215 16% 86%;
   --glass-tint: 0 0% 100%; /* white-based glass */
   --primary: 165 85% 42%;
+  --card: 0 0% 100%;
+  --card-foreground: 222 47% 11%;
+  --border: 214 32% 91%;
+  --muted-foreground: 215 16% 34%;
+  --primary-foreground: 0 0% 100%;
   color-scheme: light;
 }
 
@@ -78,7 +88,7 @@ html, body {
 
   /* Heavy glass lift with smooth, luxurious motion */
   .glass-lift {
-    @apply transition-transform duration-450 ease-[cubic-bezier(.16,.84,.44,1)];
+    @apply transition-transform duration-500 ease-out;
     will-change: transform;
   }
 
