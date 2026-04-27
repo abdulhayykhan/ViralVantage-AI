@@ -1,10 +1,10 @@
 "use client";
 
-import { ChangeEvent, useMemo, useState } from "react";
+import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { Loader2, UploadCloud, Video } from "lucide-react";
 
-import { analyzeContent, AnalyzeResult } from "@/lib/api";
+import { analyzeContent, AnalyzeResult, MOCK_VIRAL_RESULT } from "@/lib/api";
 import { supabase } from "@/lib/supabase-client";
 import { ResultsDashboard } from "@/components/results-dashboard";
 import { Button } from "@/components/ui/button";
@@ -29,6 +29,8 @@ export function UploadAnalyzePanel() {
   const [error, setError] = useState<string | null>(null);
   const [analysis, setAnalysis] = useState<AnalyzeResult | null>(null);
   const [transparencyData, setTransparencyData] = useState<TransparencyData | null>(null);
+  const [isMockData, setIsMockData] = useState(false);
+  const [showOfflineModeNotice, setShowOfflineModeNotice] = useState(false);
 
   const isBusy = stage !== "idle";
 
@@ -43,6 +45,18 @@ export function UploadAnalyzePanel() {
   }, [stage]);
 
   const readyToAnalyze = Boolean(file) && !isBusy;
+
+  useEffect(() => {
+    if (!showOfflineModeNotice) {
+      return;
+    }
+
+    const timerId = globalThis.setTimeout(() => {
+      setShowOfflineModeNotice(false);
+    }, 5000);
+
+    return () => globalThis.clearTimeout(timerId);
+  }, [showOfflineModeNotice]);
 
   function validateFile(nextFile: File): string | null {
     if (!nextFile.type.startsWith("video/")) {
@@ -111,6 +125,8 @@ export function UploadAnalyzePanel() {
     setError(null);
     setAnalysis(null);
     setTransparencyData(null);
+    setIsMockData(false);
+    setShowOfflineModeNotice(false);
     setStage("uploading");
 
     try {
@@ -152,7 +168,11 @@ export function UploadAnalyzePanel() {
       });
       setAnalysis(result);
 
-      if (userId) {
+      const usedMockResult = result === MOCK_VIRAL_RESULT;
+      setIsMockData(usedMockResult);
+      setShowOfflineModeNotice(usedMockResult);
+
+      if (userId && !usedMockResult) {
         const auditDetails = await fetchTransparencyFromAuditLog(userId, videoUrl);
         setTransparencyData(auditDetails);
       }
@@ -260,6 +280,16 @@ export function UploadAnalyzePanel() {
                 <Loader2 className="h-4 w-4 animate-spin" />
                 <span>{stageLabel}</span>
               </div>
+            ) : null}
+
+            {showOfflineModeNotice ? (
+              <div className="rounded-2xl border border-amber-300/40 bg-amber-200/10 px-4 py-3 text-sm text-amber-200">
+                Offline Mode: Using cached analysis
+              </div>
+            ) : null}
+
+            {isMockData && !showOfflineModeNotice ? (
+              <p className="text-xs text-amber-200/80">Cached analysis used for demo reliability.</p>
             ) : null}
 
             {error ? <p className="text-sm text-red-300">{error}</p> : null}
