@@ -28,7 +28,7 @@ export function InteractiveGuide() {
             exit={{ opacity: 0, y: 12 }}
             transition={{ duration: 0.35, ease: "easeOut" }}
             whileHover={{ y: -2 }}
-            className="surface-chip solid-lift flex w-auto items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-foreground shadow-sm"
+            className="surface-chip solid-lift flex w-auto items-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium text-foreground bg-background/95 backdrop-blur-md border border-border shadow-lg z-[100]"
             aria-expanded={expanded}
             aria-label="Toggle usage guide"
           >
