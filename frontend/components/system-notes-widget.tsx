@@ -21,7 +21,7 @@ export function SystemNotesWidget() {
   return (
     <AnimatePresence>
       {visible ? (
-        <div className="fixed bottom-6 left-6 z-50">
+        <div className="fixed bottom-6 left-6 z-[100]">
           <motion.button
             type="button"
             onClick={() => setExpanded((current) => !current)}
@@ -45,7 +45,7 @@ export function SystemNotesWidget() {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 14, scale: 0.98 }}
                 transition={{ duration: 0.28, ease: "easeOut" }}
-                className="surface-panel absolute bottom-full left-0 mb-3 w-[min(24rem,calc(100vw-1.5rem))] rounded-2xl p-5 text-sm text-foreground shadow-xl"
+                className="absolute bottom-full left-0 mb-3 max-w-sm rounded-2xl border border-border bg-background/95 p-5 text-sm text-foreground shadow-2xl backdrop-blur-xl"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div>
@@ -54,10 +54,9 @@ export function SystemNotesWidget() {
                   </div>
                   <Button
                     type="button"
-                    variant="outline"
                     size="sm"
                     onClick={() => setExpanded(false)}
-                    className="h-8 w-8 rounded-full p-0"
+                    className="h-8 w-8 rounded-full bg-muted/50 p-0 text-foreground hover:bg-muted"
                     aria-label="Close notes"
                   >
                     <X className="h-4 w-4" />
