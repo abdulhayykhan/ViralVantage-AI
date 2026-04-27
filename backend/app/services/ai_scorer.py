@@ -1,5 +1,6 @@
 import asyncio
 import json
+import logging
 import mimetypes
 import re
 import time
@@ -72,6 +73,9 @@ class AnalyzeResponse(BaseModel):
 
 
 class AIScorerService:
+    RETRYABLE_STATUS_CODES = {429, 503}
+    MAX_RETRIES = 3
+
     def __init__(self, settings: Settings):
         self.settings = settings
         if not settings.gemini_api_key:
@@ -80,6 +84,7 @@ class AIScorerService:
             raise RuntimeError("SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are required")
 
         self.supabase: Client = create_client(settings.supabase_url, settings.supabase_service_role_key)
+        self.logger = logging.getLogger(__name__)
 
     async def analyze(self, video_url: str, user_id: UUID | None) -> AnalyzeResponse:
         request_id = str(uuid4())
@@ -93,7 +98,7 @@ class AIScorerService:
         )
 
         try:
-            analysis, raw_ai_logic = await self._call_gemini(video_url)
+            analysis, raw_ai_logic, model_used = await self._call_gemini(video_url)
             latency_ms = int((time.perf_counter() - started_at) * 1000)
 
             audit_output_payload = {
@@ -107,6 +112,7 @@ class AIScorerService:
                 request_id,
                 audit_output_payload,
                 latency_ms,
+                model_used,
             )
             return analysis
         except HTTPException as exc:
@@ -130,8 +136,7 @@ class AIScorerService:
             )
             raise HTTPException(status_code=500, detail="Unexpected backend error") from exc
 
-    async def _call_gemini(self, video_url: str) -> tuple[AnalyzeResponse, str]:
-        endpoint = f"{self.settings.gemini_api_base_url}/v1beta/models/{self.settings.gemini_model}:generateContent"
+    async def _call_gemini(self, video_url: str) -> tuple[AnalyzeResponse, str, str]:
         mime_type = self._guess_mime_type(video_url)
 
         system_instruction = """
@@ -273,31 +278,85 @@ OUTPUT CONTRACT (STRICT):
             },
         }
 
-        timeout = httpx.Timeout(timeout=self.settings.request_timeout_seconds)
+        primary_model = "gemini-2.5-flash"
+        fallback_model = "gemini-1.5-flash"
 
-        async with httpx.AsyncClient(timeout=timeout) as client:
+        try:
+            response = await self._request_with_retry(model_name=primary_model, payload=payload)
+            analysis, parsed_text = self._parse_and_validate_response(response)
+            return analysis, parsed_text, primary_model
+        except HTTPException as primary_exc:
+            if primary_exc.status_code != 503:
+                raise
+
+            self.logger.warning(
+                "Primary Gemini model '%s' failed after retries; falling back to '%s'.",
+                primary_model,
+                fallback_model,
+            )
+
             try:
-                response = await client.post(
-                    endpoint,
-                    params={"key": self.settings.gemini_api_key},
-                    json=payload,
-                )
-                response.raise_for_status()
-            except httpx.TimeoutException as exc:
-                raise HTTPException(status_code=504, detail="Gemini request timed out") from exc
-            except httpx.HTTPStatusError as exc:
-                error_text = exc.response.text[:300]
-                raise HTTPException(status_code=502, detail=f"Gemini API error: {error_text}") from exc
-            except httpx.RequestError as exc:
-                raise HTTPException(status_code=502, detail="Gemini request failed") from exc
+                response = await self._request_with_retry(model_name=fallback_model, payload=payload)
+                analysis, parsed_text = self._parse_and_validate_response(response)
+                return analysis, parsed_text, fallback_model
+            except HTTPException as fallback_exc:
+                raise HTTPException(
+                    status_code=503,
+                    detail="AI pipeline is currently congested. Please attempt analysis again in 30 seconds.",
+                ) from fallback_exc
 
+    def _parse_and_validate_response(self, response: httpx.Response) -> tuple[AnalyzeResponse, str]:
         parsed_text = self._extract_candidate_text(response.json())
         parsed_json = self._extract_json_payload(parsed_text)
-
         try:
             return AnalyzeResponse.model_validate(parsed_json), parsed_text
         except ValidationError as exc:
             raise HTTPException(status_code=502, detail=f"Invalid AI response schema: {exc}") from exc
+
+    async def _request_with_retry(self, model_name: str, payload: dict[str, Any]) -> httpx.Response:
+        endpoint = f"{self.settings.gemini_api_base_url}/v1beta/models/{model_name}:generateContent"
+        timeout = httpx.Timeout(timeout=self.settings.request_timeout_seconds)
+
+        async with httpx.AsyncClient(timeout=timeout) as client:
+            for attempt in range(self.MAX_RETRIES + 1):
+                try:
+                    response = await client.post(
+                        endpoint,
+                        params={"key": self.settings.gemini_api_key},
+                        json=payload,
+                    )
+                    response.raise_for_status()
+                    return response
+                except httpx.HTTPStatusError as exc:
+                    if await self._sleep_if_retryable_status(exc.response.status_code, attempt):
+                        continue
+                    self._raise_for_status_error(exc)
+                except (httpx.TimeoutException, httpx.RequestError) as exc:
+                    if await self._sleep_if_retryable_status(503, attempt):
+                        continue
+                    self._raise_for_transport_error(exc)
+
+        raise HTTPException(status_code=503, detail="Gemini service unavailable after retries")
+
+    async def _sleep_if_retryable_status(self, status_code: int, attempt: int) -> bool:
+        if status_code not in self.RETRYABLE_STATUS_CODES or attempt >= self.MAX_RETRIES:
+            return False
+        await asyncio.sleep(2**(attempt + 1))
+        return True
+
+    @staticmethod
+    def _raise_for_status_error(exc: httpx.HTTPStatusError) -> None:
+        status_code = exc.response.status_code
+        if status_code in AIScorerService.RETRYABLE_STATUS_CODES:
+            raise HTTPException(status_code=503, detail="Gemini service unavailable after retries") from exc
+        error_text = exc.response.text[:300]
+        raise HTTPException(status_code=502, detail=f"Gemini API error: {error_text}") from exc
+
+    @staticmethod
+    def _raise_for_transport_error(exc: Exception) -> None:
+        if isinstance(exc, httpx.TimeoutException):
+            raise HTTPException(status_code=503, detail="Gemini request timed out after retries") from exc
+        raise HTTPException(status_code=503, detail="Gemini request failed after retries") from exc
 
     @staticmethod
     def _extract_candidate_text(raw_response: dict[str, Any]) -> str:
@@ -363,13 +422,14 @@ OUTPUT CONTRACT (STRICT):
         request_id: str,
         output_payload: dict[str, Any],
         latency_ms: int,
+        model_version: str,
     ) -> None:
         update_payload = {
             "status": "completed",
             "output_payload": output_payload,
             "latency_ms": latency_ms,
             "error_message": None,
-            "model_version": self.settings.gemini_model,
+            "model_version": model_version,
             "request_id": request_id,
         }
         self.supabase.table("ai_audit_logs").update(update_payload).eq("id", audit_row_id).execute()
