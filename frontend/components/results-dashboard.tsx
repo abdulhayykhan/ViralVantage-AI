@@ -35,15 +35,11 @@ export function ResultsDashboard({ analysis, transparencyData }: Readonly<Result
   };
 
   return (
-    <motion.div
-      whileHover={{ y: -2 }}
-      transition={{ duration: 0.18, ease: "easeOut" }}
-      className="solid-lift shadow-md"
-    >
-      <Card className="surface-panel overflow-hidden rounded-3xl">
-        <CardHeader className="flex flex-col gap-3 p-8 pb-5">
+    <motion.div className="glass-lift">
+      <Card className="glass-panel overflow-hidden rounded-3xl">
+        <CardHeader className="flex flex-col gap-3 p-8 pb-5 z-10">
           <div>
-            <CardTitle className="text-2xl font-semibold tracking-[-0.015em]">Results Dashboard</CardTitle>
+            <CardTitle className="text-3xl font-semibold brand-h2">Results Dashboard</CardTitle>
             <CardDescription className="mt-1 text-[15px] leading-6 text-muted-foreground">Scoring, hook diagnostics, and optimization actions.</CardDescription>
           </div>
           <TransparencyPanel
@@ -53,30 +49,32 @@ export function ResultsDashboard({ analysis, transparencyData }: Readonly<Result
           />
         </CardHeader>
 
-        <CardContent className="flex flex-col gap-4 p-8 pt-0">
+        <CardContent className="flex flex-col gap-6 p-8 pt-0">
           {analysis ? (
             <motion.div className="grid grid-cols-1 gap-4 xl:grid-cols-2" variants={staggerContainer} initial="hidden" animate="visible">
-              <motion.section layout variants={cardReveal} className="surface-subtle rounded-2xl p-6 xl:col-span-2">
-                <OverallScore score={analysis.overall_score} />
-              </motion.section>
+                  <motion.section layout variants={cardReveal} className="glass-subtle rounded-2xl p-6 xl:col-span-2">
+                    <div className="bg-gradient-to-r from-accent-primary/20 to-transparent p-4 rounded-lg">
+                      <OverallScore score={analysis.overall_score} />
+                    </div>
+                  </motion.section>
 
-              <motion.section layout variants={cardReveal} className="surface-subtle rounded-2xl p-6">
+                  <motion.section layout variants={cardReveal} className="glass-subtle rounded-2xl p-6">
                 <h3 className="text-xs font-semibold uppercase tracking-[0.24em] text-muted-foreground">Hook Analysis</h3>
                 <p className="mt-2 text-xs uppercase tracking-[0.14em] text-primary">Score: {analysis.hook_strength.score}/10</p>
                 <p className="mt-3 text-sm leading-6 text-foreground">{analysis.hook_strength.analysis}</p>
               </motion.section>
 
-              <motion.section layout variants={cardReveal} className="surface-subtle rounded-2xl p-6">
+                  <motion.section layout variants={cardReveal} className="glass-subtle rounded-2xl p-6">
                 <h3 className="text-xs font-semibold uppercase tracking-[0.24em] text-muted-foreground">Pacing Analysis</h3>
                 <p className="mt-3 text-sm leading-6 text-foreground">{analysis.pacing_analysis}</p>
               </motion.section>
 
-              <motion.section layout variants={cardReveal} className="surface-subtle rounded-2xl p-6">
+                  <motion.section layout variants={cardReveal} className="glass-subtle rounded-2xl p-6">
                 <h3 className="text-xs font-semibold uppercase tracking-[0.24em] text-muted-foreground">Caption Optimization</h3>
                 <p className="mt-3 text-sm leading-6 text-foreground">{analysis.caption_optimization}</p>
               </motion.section>
 
-              <motion.section layout variants={cardReveal} className="surface-subtle rounded-2xl p-6">
+                  <motion.section layout variants={cardReveal} className="glass-subtle rounded-2xl p-6">
                 <h3 className="text-xs font-semibold uppercase tracking-[0.24em] text-muted-foreground">Trending Audio and Hashtags</h3>
                 <ul className="mt-3 space-y-2 text-sm text-foreground">
                   {analysis.trending_recommendations.map((item) => (
@@ -88,7 +86,7 @@ export function ResultsDashboard({ analysis, transparencyData }: Readonly<Result
                 </ul>
               </motion.section>
 
-              <motion.section layout variants={cardReveal} className="surface-subtle rounded-2xl p-6 xl:col-span-2">
+                  <motion.section layout variants={cardReveal} className="glass-subtle rounded-2xl p-6 xl:col-span-2">
                 <h3 className="text-xs font-semibold uppercase tracking-[0.24em] text-muted-foreground">Actionable Feedback</h3>
                 <ul className="mt-3 space-y-2 text-sm text-foreground">
                   {analysis.actionable_feedback.map((item) => (

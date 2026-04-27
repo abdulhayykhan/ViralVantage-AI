@@ -226,27 +226,23 @@ export function UploadAnalyzePanel() {
 
   return (
     <>
-      <motion.div
-        whileHover={{ y: -2 }}
-        transition={{ duration: 0.18, ease: "easeOut" }}
-        className="solid-lift sticky top-8 shadow-md"
-      >
-        <Card className="surface-panel overflow-hidden rounded-3xl">
-          <CardHeader className="flex flex-col gap-3 p-8 pb-5">
-            <CardTitle className="text-2xl font-semibold tracking-[-0.015em]">Upload and Analyze</CardTitle>
+      <motion.div whileHover={{}} transition={{ duration: 0.5 }} className="glass-lift sticky top-8">
+        <Card className="glass-panel overflow-hidden rounded-3xl">
+          <CardHeader className="flex flex-col gap-3 p-8 pb-5 z-10">
+            <CardTitle className="text-3xl font-semibold brand-h2">Upload and Analyze</CardTitle>
             <CardDescription className="max-w-prose text-[15px] leading-6 text-muted-foreground">
-              Drag a short-form video to upload directly to Supabase and run virality analysis.
+              Drag a short-form video to upload. Panels use premium glass for an elevated, cinematic experience.
             </CardDescription>
           </CardHeader>
-          <CardContent className="flex flex-col gap-5 p-8 pt-0">
+          <CardContent className="flex flex-col gap-6 p-8 pt-0 z-10">
             <label
               onDragOver={onDragOver}
               onDragLeave={onDragLeave}
               onDrop={onDrop}
               htmlFor="video-upload-input"
               className={cn(
-                "surface-subtle solid-lift flex min-h-44 flex-col items-center justify-center rounded-2xl p-7 text-center shadow-sm",
-                isDragging ? "border-primary bg-primary/5" : "",
+                "glass-subtle glass-lift flex min-h-44 flex-col items-center justify-center rounded-2xl p-7 text-center",
+                isDragging ? "border-accent-primary bg-accent-primary/6" : "",
                 isBusy && "cursor-not-allowed opacity-70",
               )}
             >
@@ -259,15 +255,15 @@ export function UploadAnalyzePanel() {
                 className="sr-only"
                 aria-label="Upload video"
               />
-              <UploadCloud className={cn("mb-3 h-8 w-8 text-muted-foreground", readyToAnalyze && "animate-pulse text-primary")} />
-              <p className="text-base font-semibold tracking-[-0.01em]">Drop video here or click to browse</p>
+              <UploadCloud className={cn("mb-3 h-10 w-10 text-muted-foreground", readyToAnalyze && "animate-pulse text-accent-primary")} />
+              <p className="text-lg font-semibold tracking-[-0.01em]">Drop video here or click to browse</p>
               <p className="mt-1 text-xs font-medium uppercase tracking-[0.15em] text-muted-foreground">Maximum file size: 50MB</p>
             </label>
 
             {file ? (
-              <div className="surface-subtle flex flex-col gap-1 rounded-2xl p-4 text-sm">
+              <div className="glass-subtle flex flex-col gap-1 rounded-2xl p-4 text-sm">
                 <div className="flex items-center gap-2 font-medium">
-                  <Video className="h-4 w-4 text-primary" />
+                  <Video className="h-4 w-4 text-accent-primary" />
                   <span className="truncate">{file.name}</span>
                 </div>
                 <p className="mt-1 text-xs text-muted-foreground">{(file.size / (1024 * 1024)).toFixed(2)} MB</p>
@@ -275,23 +271,23 @@ export function UploadAnalyzePanel() {
             ) : null}
 
             {stageLabel ? (
-              <div className="surface-subtle flex items-center gap-2 rounded-2xl px-4 py-3 text-sm text-primary">
+              <div className="glass-subtle flex items-center gap-3 rounded-2xl px-4 py-3 text-sm text-accent-primary">
                 <Loader2 className="h-4 w-4 animate-spin" />
-                <span>{stageLabel}</span>
+                <span className="font-medium">{stageLabel}</span>
               </div>
             ) : null}
 
             {showOfflineModeNotice ? (
-              <div className="rounded-2xl border border-amber-500 bg-amber-100 px-4 py-3 text-sm font-medium text-amber-900 dark:bg-amber-900 dark:text-amber-100">
+              <div className="rounded-2xl border border-amber-400 bg-amber-50/40 px-4 py-3 text-sm font-semibold text-amber-900 dark:bg-amber-900/30 dark:text-amber-100">
                 Offline Mode: Using cached analysis
               </div>
             ) : null}
 
             {isMockData && !showOfflineModeNotice ? (
-              <p className="text-xs text-amber-300">Cached analysis used for demo reliability.</p>
+              <p className="text-xs text-amber-600">Cached analysis used for demo reliability.</p>
             ) : null}
 
-            {error ? <p className="text-sm text-red-300">{error}</p> : null}
+            {error ? <p className="text-sm text-red-400">{error}</p> : null}
 
             <Button onClick={handleAnalyze} disabled={!file || isBusy} className="w-full">
               {isBusy ? "Processing..." : "Analyze Video"}
