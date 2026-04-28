@@ -7,7 +7,7 @@ from app.services.ai_scorer import AIScorerService, AnalyzeRequest, AnalyzeRespo
 
 settings = get_settings()
 ai_scorer_service = AIScorerService(settings)
-cors_origins = [origin.strip() for origin in settings.frontend_cors_origins.split(",") if origin.strip()]
+cors_origins = [origin.strip() for origin in settings.allowed_origins.split(",") if origin.strip()]
 
 app = FastAPI(
     title=settings.app_name,

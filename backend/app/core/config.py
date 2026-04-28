@@ -12,7 +12,7 @@ class Settings(BaseSettings):
     app_debug: bool = Field(default=False)
 
     api_v1_prefix: str = "/api/v1"
-    frontend_cors_origins: str = Field(default="http://localhost:3000,http://127.0.0.1:3000")
+    allowed_origins: str = Field(default="http://localhost:3000,http://127.0.0.1:3000")
 
     supabase_url: str = Field(default="")
     supabase_anon_key: str = Field(default="")
