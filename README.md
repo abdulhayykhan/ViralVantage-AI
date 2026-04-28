@@ -2,8 +2,6 @@
 
 AI-powered short-form video virality analyzer. Upload a video, get scored on hook strength, pacing, caption optimization, and trending recommendations — powered by Gemini 2.5 Flash with Supabase storage and audit logging.
 
-Built for the Code Pulse Hackathon 2026.
-
 ## Architecture
 
 ```
