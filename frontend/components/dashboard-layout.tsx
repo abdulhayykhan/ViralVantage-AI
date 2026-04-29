@@ -51,10 +51,10 @@ export function DashboardLayout({ children }: Readonly<{ children: ReactNode }>)
       setIsOnline(false);
     };
 
-    window.addEventListener("system-status-offline", handleSystemStatusOffline);
+    globalThis.addEventListener("system-status-offline", handleSystemStatusOffline);
 
     return () => {
-      window.removeEventListener("system-status-offline", handleSystemStatusOffline);
+      globalThis.removeEventListener("system-status-offline", handleSystemStatusOffline);
     };
   }, []);
 
@@ -62,15 +62,15 @@ export function DashboardLayout({ children }: Readonly<{ children: ReactNode }>)
     <ThemeProvider attribute="class" defaultTheme="dark">
       <div className="relative min-h-screen glass-mesh">
         <header className="relative z-10">
-          <div className="glass-panel mx-auto flex w-full max-w-[1800px] items-center justify-between px-4 lg:px-8 py-6 backdrop-blur-2xl">
-            <div className="z-10">
+          <div className="glass-panel mx-auto flex w-full max-w-[1800px] flex-col items-center justify-between gap-4 px-4 py-6 sm:flex-row lg:px-8 backdrop-blur-2xl">
+            <div className="z-10 w-full sm:w-auto">
               <div className="flex items-center gap-3">
                 <img src="/icon.svg" alt="ViralVantage-AI logo" className="h-6 w-6 shrink-0" />
                 <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-muted-foreground">ViralVantage-AI</p>
               </div>
-              <h1 className="mt-1 brand-h1">Creator Performance Dashboard</h1>
+              <h1 className="mt-1 text-xl text-center sm:text-left sm:text-2xl md:text-3xl brand-h1">Creator Performance Dashboard</h1>
             </div>
-            <div className="flex items-center gap-3 z-10">
+            <div className="flex w-full flex-row items-center justify-center gap-2 sm:w-auto sm:justify-end sm:gap-4 z-10">
               <div className="glass-chip flex items-center gap-2 px-3 py-1 text-xs font-medium">
                 <span className={`inline-block h-2.5 w-2.5 rounded-full ${isOnline ? "bg-primary" : "bg-red-500"}`} />
                 <span className="uppercase tracking-[0.12em]">SYSTEM STATUS: {isOnline ? "ONLINE" : "OFFLINE"}</span>
@@ -80,7 +80,18 @@ export function DashboardLayout({ children }: Readonly<{ children: ReactNode }>)
           </div>
         </header>
 
-        <main className="relative z-10 mx-auto grid w-full max-w-[1800px] grid-cols-1 items-start gap-8 px-4 py-10 lg:grid-cols-[420px_1fr] lg:px-8 xl:grid-cols-[480px_1fr]">{children}</main>
+        <main className="relative z-10 mx-auto flex w-full max-w-[1800px] flex-col gap-4 px-4 py-10 pb-24 sm:gap-6 sm:pb-32 lg:flex-row lg:gap-8 lg:px-8">{children}</main>
+        <footer className="relative z-10 mt-auto w-full py-8 text-center text-sm text-gray-400/80">
+          Made with ❤️ by{" "}
+          <a
+            href="https://www.linkedin.com/in/abdulhayykhan/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-medium underline underline-offset-4 transition-colors hover:text-emerald-400"
+          >
+            Abdul Hayy Khan
+          </a>
+        </footer>
         <SystemNotesWidget />
         <InteractiveGuide />
       </div>
