@@ -278,32 +278,36 @@ OUTPUT CONTRACT (STRICT):
             },
         }
 
-        primary_model = "gemini-2.5-flash"
-        fallback_model = "gemini-1.5-flash"
+        models_to_try = [
+            "gemini-2.5-flash",
+            "gemini-2.5-flash-lite",
+            "gemini-1.5-flash"
+        ]
 
-        try:
-            response = await self._request_with_retry(model_name=primary_model, payload=payload)
-            analysis, parsed_text = self._parse_and_validate_response(response)
-            return analysis, parsed_text, primary_model
-        except HTTPException as primary_exc:
-            if primary_exc.status_code != 503:
-                raise
+        last_exception = None
 
-            self.logger.warning(
-                "Primary Gemini model '%s' failed after retries; falling back to '%s'.",
-                primary_model,
-                fallback_model,
-            )
-
+        for model_name in models_to_try:
             try:
-                response = await self._request_with_retry(model_name=fallback_model, payload=payload)
+                if model_name != models_to_try[0]:
+                    self.logger.warning("Attempting fallback to model: '%s'", model_name)
+
+                response = await self._request_with_retry(model_name=model_name, payload=payload)
                 analysis, parsed_text = self._parse_and_validate_response(response)
-                return analysis, parsed_text, fallback_model
-            except HTTPException as fallback_exc:
-                raise HTTPException(
-                    status_code=503,
-                    detail="AI pipeline is currently congested. Please attempt analysis again in 30 seconds.",
-                ) from fallback_exc
+                
+                return analysis, parsed_text, model_name
+                
+            except HTTPException as exc:
+                if exc.status_code != 503:
+                    raise
+                
+                self.logger.warning("Model '%s' failed with 503. Retrying next model.", model_name)
+                last_exception = exc
+                continue
+
+        raise HTTPException(
+            status_code=503,
+            detail="AI pipeline is currently congested. All fallback models failed. Please attempt analysis again in 30 seconds."
+        ) from last_exception
 
     def _parse_and_validate_response(self, response: httpx.Response) -> tuple[AnalyzeResponse, str]:
         parsed_text = self._extract_candidate_text(response.json())
